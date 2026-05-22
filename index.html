@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GVB Booischot Loginhelper</title>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+body {
+    font-family: Segoe UI, Arial;
+    background: #d8e3f0;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    background: #f5f7fa;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+/* ✅ FIX layout */
+.grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 18px;
+}
+
+.inputblok {
+    background: #eef4fb;
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px solid #84a646;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: 2px solid #84a646;
+    box-sizing: border-box;
+}
+
+/* knoppen */
+.button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    color: white;
+    cursor: pointer;
+}
+
+.teams { background:#6264A7; }
+.word { background:#2B579A; }
+.ppt { background:#D24726; }
+.onedrive { background:#0078D4; }
+.outlook { background:#0072C6; }
+
+.l1 { background:#4CAF50; }
+.l2 { background:#8BC34A; }
+.l3 { background:#FFC107; }
+.l4 { background:#FF7043; }
+.l5 { background:#9C27B0; }
+.l6 { background:#3F51B5; }
+
+.WS { background:#FF9800; }
+.TL { background:#E91E63; }
+
+.button:hover {
+    opacity: 0.85;
+}
+
+#reader {
+    margin-top: 10px;
+}
+
+/* toolbox */
+.toolbox-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+/* mobiel */
+@media (max-width: 900px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Loginhelper</h1>
+
+<div class="grid">
+
+<!-- ✅ BLOK 1 -->
+<div>
+<div class="inputblok">
+
+<input id="snummer" placeholder="Typ S-nummer of scan QR">
+
+<button class="button" style="background:#8eb458;" onclick="startScan()">
+📷 Scan QR-code
+</button>
+
+<div id="reader"></div>
+
+</div>
+</div>
+
+<!-- ✅ BLOK 2 -->
+<div>
+<h2>Office</h2>
+
+<button class="button teams" onclick="openApp('teams')">Teams</button>
+<button class="button word" onclick="openApp('word')">Word</button>
+<button class="button ppt" onclick="openApp('ppt')">PowerPoint</button>
+<button class="button onedrive" onclick="openApp('onedrive')">OneDrive</button>
+<button class="button outlook" onclick="openApp('outlook')">Outlook</button>
+</div>
+
+<!-- ✅ BLOK 3 -->
+<div>
+<h2>Toolboxen</h2>
+
+<div class="toolbox-grid">
+<button class="button l1" onclick="openToolbox('l1')">L1</button>
+<button class="button l2" onclick="openToolbox('l2')">L2</button>
+<button class="button l3" onclick="openToolbox('l3')">L3</button>
+<button class="button l4" onclick="openToolbox('l4')">L4</button>
+<button class="button l5" onclick="openToolbox('l5')">L5</button>
+<button class="button l6" onclick="openToolbox('l6')">L6</button>
+
+<button class="button WS" onclick="openToolbox('WS')">WS</button>
+<button class="button TL" onclick="openToolbox('TL')">TL</button>
+</div>
+
+</div>
+
+</div>
+</div>
+
+<script>
+
+let currentUser = "";
+let scanner = null;
+
+/* ===== BETERE SCAN ===== */
+function startScan() {
+
+    const reader = document.getElementById("reader");
+
+    reader.innerHTML = "📷 Camera starten...";
+
+    if (scanner) {
+        scanner.stop().catch(()=>{});
+    }
+
+    scanner = new Html5Qrcode("reader");
+
+    scanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 220 },
+        (decodedText) => {
+
+            scanner.stop().then(() => reader.innerHTML = "");
+
+            handleQR(decodedText);
+
+        }
+    ).catch(() => {
+        alert("❌ Camera werkt niet (check HTTPS)");
+    });
+}
+
+/* ===== BETERE QR VALIDATIE ===== */
+function handleQR(data) {
+
+    let raw = data.trim();
+    let user = "";
+
+    console.log("QR raw:", raw);
+
+    // ✅ 1. Teams URL uitlezen
+    if (raw.includes("login_hint=")) {
+
+        try {
+            let url = new URL(raw);
+            let param = url.searchParams.get("login_hint");
+
+            if (param) {
+                user = decodeURIComponent(param).trim().toLowerCase();
+            }
+
+        } catch {
+            let match = raw.match(/login_hint=([^&]+)/);
+            if (match && match[1]) {
+                user = decodeURIComponent(match[1]).trim().toLowerCase();
+            }
+        }
+    }
+
+    // ✅ 2. email of tekst
+    else {
+        user = raw.replace(/\s/g, "").toLowerCase();
+    }
+
+    // ✅ 🧠 CORRECTIE: voeg automatisch "s" toe indien nodig
+    let match = user.match(/^([0-9]{6})@leerling\.gvbbooischot\.be$/);
+    if (match) {
+        user = "s" + match[1] + "@leerling.gvbbooischot.be";
+    }
+
+    let match2 = user.match(/^[0-9]{6}$/);
+    if (match2) {
+        user = "s" + user + "@leerling.gvbbooischot.be";
+    }
+
+    // ✅ finale check
+    if (/^s[0-9]{6}@leerling\.gvbbooischot\.be$/.test(user)) {
+        console.log("✅ Herkend:", user);
+        goToTeams(user);
+        return;
+    }
+
+    alert("❌ QR-code niet herkend:\n" + raw);
+}
+
+/* ===== INPUT ===== */
+function getUserFromInput() {
+
+    let s = document.getElementById("snummer").value.trim().toLowerCase();
+
+    if (!s) {
+        alert("⚠️ Typ S-nummer of scan QR");
+        return null;
+    }
+
+    if (s.includes("@")) return s;
+
+    if (/^[0-9]{6}$/.test(s)) {
+        return "s" + s + "@leerling.gvbbooischot.be";
+    }
+
+    alert("⚠️ Ongeldig nummer");
+    return null;
+}
+
+/* ===== TEAMS ===== */
+function goToTeams(user) {
+
+    let url = "https://teams.microsoft.com/?login_hint=" + user;
+    window.location.href = url;
+}
+
+/* ===== OFFICE ===== */
+function openApp(app) {
+
+    let user = getUserFromInput();
+    if (!user) return;
+
+    let url = "";
+
+    switch(app) {
+
+        case "teams":
+            goToTeams(user);
+            return;
+
+        case "word":
+            url = "https://www.office.com/launch/word?auth=2&login_hint=" + user;
+            break;
+
+        case "ppt":
+            url = "https://www.office.com/launch/powerpoint?auth=2&login_hint=" + user;
+            break;
+
+        case "onedrive":
+            url = "https://www.office.com/launch/onedrive?auth=2&login_hint=" + user;
+            break;
+
+        case "outlook":
+            url = "https://outlook.office.com/mail/?login_hint=" + user;
+            break;
+    }
+
+    window.location.href = url;
+}
+/* ===== TOOLBOX ===== */
+function openToolbox(k) {
+
+    let links = {
+        l1: "https://sites.google.com/gvbbooischot.be/1elj/1e-leerjaar",
+        l2: "https://sites.google.com/gvbbooischot.be/2elj/2e-leerjaar",
+        l3: "https://sites.google.com/gvbbooischot.be/3elj/3e-leerjaar",
+        l4: "https://sites.google.com/gvbbooischot.be/4elj/4e-leerjaar",
+        l5: "https://sites.google.com/gvbbooischot.be/5elj/5e-leerjaar",
+        l6: "https://sites.google.com/gvbbooischot.be/6elj/6e-leerjaar",
+
+        WS: "https://sites.google.com/gvbbooischot.be/wijkschool/wijkschool",
+        TL: "https://sites.google.com/gvbbooischot.be/ks-ter-laken"
+    };
+
+    window.location.href = links[k];
+}
+
+</script>
+
+</body>
+</html>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -15,7 +16,7 @@
 
 body{
     font-family:"Segoe UI",Arial,sans-serif;
-    background:#d8e3f0;
+    background:#eef3f8;
     margin:0;
     padding:20px;
 }
@@ -23,19 +24,31 @@ body{
 /* CONTAINER */
 
 .container{
+    position:relative;
     max-width:1100px;
     margin:auto;
-    background:#f7f9fc;
+    background:#ffffff;
     border-radius:20px;
     padding:30px;
-    box-shadow:0 8px 25px rgba(0,0,0,0.10);
+    box-shadow:0 8px 25px rgba(35,55,105,0.16);
+    border-top:8px solid #2f4f8f;
+}
+
+/* LOGO */
+
+.logo{
+    position:absolute;
+    top:18px;
+    left:22px;
+    width:105px;
+    height:auto;
 }
 
 /* TITEL */
 
 h1{
     text-align:center;
-    color:#5f7d30;
+    color:#2f4f8f;
     margin-top:0;
     margin-bottom:25px;
     font-size:38px;
@@ -53,8 +66,8 @@ h1{
     width:100%;
     max-width:600px;
 
-    background:#eef4fb;
-    border:2px solid #84a646;
+    background:#f3f6ec;
+    border:2px solid #a9b35c;
     border-radius:16px;
     padding:20px;
 }
@@ -66,7 +79,7 @@ input{
     padding:16px;
     font-size:20px;
     border-radius:12px;
-    border:2px solid #84a646;
+    border:2px solid #a9b35c;
     margin-bottom:10px;
 }
 
@@ -93,7 +106,7 @@ input{
 }
 
 .scanbtn{
-    background:#8eb458;
+    background:#a9b35c;
     font-size:22px;
     padding:18px;
 }
@@ -115,17 +128,18 @@ input{
 }
 
 .card{
-    background:white;
+    background:#f8fafc;
     border-radius:16px;
     padding:18px;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    box-shadow:0 4px 12px rgba(35,55,105,.10);
+    border:1px solid #dfe7f2;
 }
 
 .card h2{
     text-align:center;
     margin-top:0;
     margin-bottom:15px;
-    color:#5f7d30;
+    color:#2f4f8f;
 }
 
 /* OFFICE */
@@ -164,10 +178,18 @@ input{
 
     h1{
         font-size:30px;
+        margin-top:70px;
     }
 
     .scanbtn{
         font-size:18px;
+    }
+
+    .logo{
+        width:90px;
+        top:16px;
+        left:50%;
+        transform:translateX(-50%);
     }
 
 }
@@ -178,6 +200,8 @@ input{
 <body>
 
 <div class="container">
+
+    <img class="logo" src="Logo_mascottes%20(2).png" alt="GVB Booischot logo">
 
     <h1>🎓 Loginhelper</h1>
 
@@ -492,4 +516,3 @@ function openToolbox(k){
 
 </body>
 </html>
-``

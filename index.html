@@ -8,55 +8,127 @@
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
-body {
-    font-family: Segoe UI, Arial;
-    background: #d8e3f0;
-    margin: 0;
-    padding: 20px;
+
+*{
+    box-sizing:border-box;
 }
 
-.container {
-    max-width: 1100px;
-    margin: auto;
-    background: #f5f7fa;
-    border-radius: 16px;
-    padding: 20px;
+body{
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:#d8e3f0;
+    margin:0;
+    padding:20px;
 }
 
-/* ✅ FIX layout */
-.grid {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr 1fr;
-    gap: 18px;
+/* CONTAINER */
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    background:#f7f9fc;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.10);
 }
 
-.inputblok {
-    background: #eef4fb;
-    padding: 12px;
-    border-radius: 12px;
-    border: 2px solid #84a646;
+/* TITEL */
+
+h1{
+    text-align:center;
+    color:#5f7d30;
+    margin-top:0;
+    margin-bottom:25px;
+    font-size:38px;
 }
 
-input {
-    width: 100%;
-    padding: 14px;
-    font-size: 18px;
-    border-radius: 10px;
-    border: 2px solid #84a646;
-    box-sizing: border-box;
+/* SCAN GEDEELTE */
+
+.scan-section{
+    display:flex;
+    justify-content:center;
+    margin-bottom:30px;
 }
 
-/* knoppen */
-.button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 8px;
-    border-radius: 10px;
-    border: none;
-    font-size: 15px;
-    color: white;
-    cursor: pointer;
+.inputblok{
+    width:100%;
+    max-width:600px;
+
+    background:#eef4fb;
+    border:2px solid #84a646;
+    border-radius:16px;
+    padding:20px;
 }
+
+/* INPUT */
+
+input{
+    width:100%;
+    padding:16px;
+    font-size:20px;
+    border-radius:12px;
+    border:2px solid #84a646;
+    margin-bottom:10px;
+}
+
+/* KNOPPEN */
+
+.button{
+    width:100%;
+    padding:14px;
+    margin-top:8px;
+
+    border:none;
+    border-radius:12px;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+
+    transition:all .2s;
+}
+
+.button:hover{
+    transform:translateY(-2px);
+    opacity:.92;
+}
+
+.scanbtn{
+    background:#8eb458;
+    font-size:22px;
+    padding:18px;
+}
+
+/* SCANNER */
+
+#reader{
+    margin-top:15px;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+/* ONDERSTE BLOKKEN */
+
+.content-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.card{
+    background:white;
+    border-radius:16px;
+    padding:18px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.card h2{
+    text-align:center;
+    margin-top:0;
+    margin-bottom:15px;
+    color:#5f7d30;
+}
+
+/* OFFICE */
 
 .teams { background:#6264A7; }
 .word { background:#2B579A; }
@@ -64,9 +136,17 @@ input {
 .onedrive { background:#0078D4; }
 .outlook { background:#0072C6; }
 
+/* TOOLBOX */
+
+.toolbox-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
 .l1 { background:#4CAF50; }
 .l2 { background:#8BC34A; }
-.l3 { background:#FFC107; }
+.l3 { background:#FFC107; color:black; }
 .l4 { background:#FF7043; }
 .l5 { background:#9C27B0; }
 .l6 { background:#3F51B5; }
@@ -74,27 +154,24 @@ input {
 .WS { background:#FF9800; }
 .TL { background:#E91E63; }
 
-.button:hover {
-    opacity: 0.85;
-}
+/* MOBIEL */
 
-#reader {
-    margin-top: 10px;
-}
+@media (max-width:900px){
 
-/* toolbox */
-.toolbox-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-}
-
-/* mobiel */
-@media (max-width: 900px) {
-    .grid {
-        grid-template-columns: 1fr;
+    .content-grid{
+        grid-template-columns:1fr;
     }
+
+    h1{
+        font-size:30px;
+    }
+
+    .scanbtn{
+        font-size:18px;
+    }
+
 }
+
 </style>
 </head>
 
@@ -102,63 +179,100 @@ input {
 
 <div class="container">
 
-<h1>Loginhelper</h1>
+    <h1>🎓 Loginhelper</h1>
 
-<div class="grid">
+    <!-- QR SCANNER BOVENAAN -->
 
-<!-- ✅ BLOK 1 -->
-<div>
-<div class="inputblok">
+    <div class="scan-section">
 
-<input id="snummer" placeholder="Typ S-nummer of scan QR">
+        <div class="inputblok">
 
-<button class="button" style="background:#8eb458;" onclick="startScan()">
-📷 Scan QR-code
-</button>
+            <input
+                id="snummer"
+                placeholder="Typ S-nummer of scan QR-code">
 
-<div id="reader"></div>
+            <button class="button scanbtn" onclick="startScan()">
+                📷 Scan QR-code
+            </button>
 
-</div>
-</div>
+            <div id="reader"></div>
 
-<!-- ✅ BLOK 2 -->
-<div>
-<h2>Office</h2>
+        </div>
 
-<button class="button teams" onclick="openApp('teams')">Teams</button>
-<button class="button word" onclick="openApp('word')">Word</button>
-<button class="button ppt" onclick="openApp('ppt')">PowerPoint</button>
-<button class="button onedrive" onclick="openApp('onedrive')">OneDrive</button>
-<button class="button outlook" onclick="openApp('outlook')">Outlook</button>
-</div>
+    </div>
 
-<!-- ✅ BLOK 3 -->
-<div>
-<h2>Toolboxen</h2>
+    <!-- ONDERSTE DEEL -->
 
-<div class="toolbox-grid">
-<button class="button l1" onclick="openToolbox('l1')">L1</button>
-<button class="button l2" onclick="openToolbox('l2')">L2</button>
-<button class="button l3" onclick="openToolbox('l3')">L3</button>
-<button class="button l4" onclick="openToolbox('l4')">L4</button>
-<button class="button l5" onclick="openToolbox('l5')">L5</button>
-<button class="button l6" onclick="openToolbox('l6')">L6</button>
+    <div class="content-grid">
 
-<button class="button WS" onclick="openToolbox('WS')">WS</button>
-<button class="button TL" onclick="openToolbox('TL')">TL</button>
-</div>
+        <!-- OFFICE -->
 
-</div>
+        <div class="card">
 
-</div>
+            <h2>Microsoft 365</h2>
+
+            <button class="button teams" onclick="openApp('teams')">
+                Teams
+            </button>
+
+            <button class="button word" onclick="openApp('word')">
+                Word
+            </button>
+
+            <button class="button ppt" onclick="openApp('ppt')">
+                PowerPoint
+            </button>
+
+            <button class="button onedrive" onclick="openApp('onedrive')">
+                OneDrive
+            </button>
+
+            <button class="button outlook" onclick="openApp('outlook')">
+                Outlook
+            </button>
+
+        </div>
+
+        <!-- TOOLBOX -->
+
+        <div class="card">
+
+            <h2>Toolboxen</h2>
+
+            <div class="toolbox-grid">
+
+                <button class="button l1" onclick="openToolbox('l1')">L1</button>
+                <button class="button l2" onclick="openToolbox('l2')">L2</button>
+
+                <button class="button l3" onclick="openToolbox('l3')">L3</button>
+                <button class="button l4" onclick="openToolbox('l4')">L4</button>
+
+                <button class="button l5" onclick="openToolbox('l5')">L5</button>
+                <button class="button l6" onclick="openToolbox('l6')">L6</button>
+
+                <button class="button WS" onclick="openToolbox('WS')">WS</button>
+                <button class="button TL" onclick="openToolbox('TL')">TL</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 <script>
 
-let currentUser = "";
 let scanner = null;
 
-/* ===== BETERE SCAN ===== */
+/* FOCUS OP INPUT */
+
+window.onload = function() {
+    document.getElementById("snummer").focus();
+};
+
+/* QR SCAN */
+
 function startScan() {
 
     const reader = document.getElementById("reader");
@@ -173,145 +287,202 @@ function startScan() {
 
     scanner.start(
         { facingMode: "environment" },
-        { fps: 10, qrbox: 220 },
+        {
+            fps: 10,
+            qrbox: 220
+        },
         (decodedText) => {
 
-            scanner.stop().then(() => reader.innerHTML = "");
+            scanner.stop()
+            .then(() => reader.innerHTML = "");
 
             handleQR(decodedText);
 
         }
-    ).catch(() => {
-        alert("❌ Camera werkt niet (check HTTPS)");
+    )
+    .catch(() => {
+        alert("❌ Camera werkt niet. Gebruik HTTPS.");
     });
 }
 
-/* ===== BETERE QR VALIDATIE ===== */
+/* QR VERWERKEN */
+
 function handleQR(data) {
 
     let raw = data.trim();
     let user = "";
 
-    console.log("QR raw:", raw);
-
-    // ✅ 1. Teams URL uitlezen
     if (raw.includes("login_hint=")) {
 
         try {
+
             let url = new URL(raw);
             let param = url.searchParams.get("login_hint");
 
-            if (param) {
-                user = decodeURIComponent(param).trim().toLowerCase();
+            if(param){
+                user = decodeURIComponent(param)
+                    .trim()
+                    .toLowerCase();
             }
 
         } catch {
-            let match = raw.match(/login_hint=([^&]+)/);
-            if (match && match[1]) {
-                user = decodeURIComponent(match[1]).trim().toLowerCase();
+
+            let match =
+                raw.match(/login_hint=([^&]+)/);
+
+            if(match && match[1]){
+
+                user = decodeURIComponent(match[1])
+                    .trim()
+                    .toLowerCase();
+
             }
         }
+
+    } else {
+
+        user = raw
+            .replace(/\s/g,"")
+            .toLowerCase();
+
     }
 
-    // ✅ 2. email of tekst
-    else {
-        user = raw.replace(/\s/g, "").toLowerCase();
+    let match =
+        user.match(/^([0-9]{6})@leerling\.gvbbooischot\.be$/);
+
+    if(match){
+        user =
+            "s" +
+            match[1] +
+            "@leerling.gvbbooischot.be";
     }
 
-    // ✅ 🧠 CORRECTIE: voeg automatisch "s" toe indien nodig
-    let match = user.match(/^([0-9]{6})@leerling\.gvbbooischot\.be$/);
-    if (match) {
-        user = "s" + match[1] + "@leerling.gvbbooischot.be";
+    if(/^[0-9]{6}$/.test(user)){
+
+        user =
+            "s" +
+            user +
+            "@leerling.gvbbooischot.be";
+
     }
 
-    let match2 = user.match(/^[0-9]{6}$/);
-    if (match2) {
-        user = "s" + user + "@leerling.gvbbooischot.be";
-    }
+    if(
+        /^s[0-9]{6}@leerling\.gvbbooischot\.be$/
+        .test(user)
+    ){
 
-    // ✅ finale check
-    if (/^s[0-9]{6}@leerling\.gvbbooischot\.be$/.test(user)) {
-        console.log("✅ Herkend:", user);
         goToTeams(user);
         return;
+
     }
 
-    alert("❌ QR-code niet herkend:\n" + raw);
+    alert("❌ QR-code niet herkend");
 }
 
-/* ===== INPUT ===== */
-function getUserFromInput() {
+/* INPUT */
 
-    let s = document.getElementById("snummer").value.trim().toLowerCase();
+function getUserFromInput(){
 
-    if (!s) {
+    let s =
+        document.getElementById("snummer")
+        .value
+        .trim()
+        .toLowerCase();
+
+    if(!s){
+
         alert("⚠️ Typ S-nummer of scan QR");
+
         return null;
     }
 
-    if (s.includes("@")) return s;
+    if(s.includes("@")){
+        return s;
+    }
 
-    if (/^[0-9]{6}$/.test(s)) {
-        return "s" + s + "@leerling.gvbbooischot.be";
+    if(/^[0-9]{6}$/.test(s)){
+
+        return "s" +
+               s +
+               "@leerling.gvbbooischot.be";
     }
 
     alert("⚠️ Ongeldig nummer");
+
     return null;
 }
 
-/* ===== TEAMS ===== */
-function goToTeams(user) {
+/* TEAMS */
 
-    let url = "https://teams.microsoft.com/?login_hint=" + user;
+function goToTeams(user){
+
+    let url =
+        "https://teams.microsoft.com/?login_hint=" +
+        user;
+
     window.location.href = url;
 }
 
-/* ===== OFFICE ===== */
-function openApp(app) {
+/* OFFICE */
+
+function openApp(app){
 
     let user = getUserFromInput();
-    if (!user) return;
+
+    if(!user) return;
 
     let url = "";
 
-    switch(app) {
+    switch(app){
 
         case "teams":
             goToTeams(user);
             return;
 
         case "word":
-            url = "https://www.office.com/launch/word?auth=2&login_hint=" + user;
+            url =
+            "https://www.office.com/launch/word?auth=2&login_hint=" +
+            user;
             break;
 
         case "ppt":
-            url = "https://www.office.com/launch/powerpoint?auth=2&login_hint=" + user;
+            url =
+            "https://www.office.com/launch/powerpoint?auth=2&login_hint=" +
+            user;
             break;
 
         case "onedrive":
-            url = "https://www.office.com/launch/onedrive?auth=2&login_hint=" + user;
+            url =
+            "https://www.office.com/launch/onedrive?auth=2&login_hint=" +
+            user;
             break;
 
         case "outlook":
-            url = "https://outlook.office.com/mail/?login_hint=" + user;
+            url =
+            "https://outlook.office.com/mail/?login_hint=" +
+            user;
             break;
     }
 
     window.location.href = url;
 }
-/* ===== TOOLBOX ===== */
-function openToolbox(k) {
 
-    let links = {
-        l1: "https://gvbb.my.canva.site/1e-leerjaar/links",
-        l2: "https://gvbb.my.canva.site/2e-leerjaar/links",
-        l3: "https://gvbb.my.canva.site/3e-leerjaar/links",
-        l4: "https://gvbb.my.canva.site/4e-leerjaar/links",
-        l5: "https://gvbb.my.canva.site/5e-leerjaar/links",
-        l6: "https://gvbb.my.canva.site/6e-leerjaar/links",
+/* TOOLBOXEN */
 
-        WS: "https://sites.google.com/gvbbooischot.be/wijkschool/wijkschool",
-        TL: "https://sites.google.com/gvbbooischot.be/ks-ter-laken"
+function openToolbox(k){
+
+    const links = {
+
+        l1:"https://gvbb.my.canva.site/1e-leerjaar/links",
+        l2:"https://gvbb.my.canva.site/2e-leerjaar/links",
+        l3:"https://gvbb.my.canva.site/3e-leerjaar/links",
+        l4:"https://gvbb.my.canva.site/4e-leerjaar/links",
+        l5:"https://gvbb.my.canva.site/5e-leerjaar/links",
+        l6:"https://gvbb.my.canva.site/6e-leerjaar/links",
+
+        WS:"https://sites.google.com/gvbbooischot.be/wijkschool/wijkschool",
+        TL:"https://sites.google.com/gvbbooischot.be/ks-ter-laken"
+
     };
 
     window.location.href = links[k];
@@ -321,3 +492,4 @@ function openToolbox(k) {
 
 </body>
 </html>
+``

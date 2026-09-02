@@ -51,7 +51,7 @@ h1{margin:0;color:var(--blue);text-align:center;font-size:clamp(28px,3vw,36px);l
 const SCHOOL_DOMAIN="leerling.gvbbooischot.be";let scanner=null,running=false,starting=false;
 const toolboxLinks={l1:"https://gvbb.my.canva.site/1e-leerjaar/links",l2:"https://gvbb.my.canva.site/2e-leerjaar/links",l3:"https://gvbb.my.canva.site/3e-leerjaar/links",l4:"https://gvbb.my.canva.site/4e-leerjaar/links",l5:"https://gvbb.my.canva.site/5e-leerjaar/links",l6:"https://gvbb.my.canva.site/6e-leerjaar/links"};
 /* Voeg hier later de vijf bestemmingslinks toe. */
-const imageToolLinks={bloem:"",jip:"",jules:"",kikker:"",vlinder:""};
+const imageToolLinks={bloem:"https://gvbb.my.canva.site/ws-bloemenklas/links",jip:"https://gvbb.my.canva.site/tl-jip-en-jannekeklas/links",jules:"https://gvbb.my.canva.site/tl-julesklas/links",kikker:"https://gvbb.my.canva.site/tl-kikkerklas/links",vlinder:"https://gvbb.my.canva.site/ws-rupsen-en-vlinderklas/links"};
 window.addEventListener("load",()=>document.getElementById("snummer").focus());
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeScanner();if(e.key==="Enter"&&document.activeElement.id==="snummer")openApp("teams")});
 document.getElementById("scannerModal").addEventListener("click",e=>{if(e.target.id==="scannerModal")closeScanner()});
